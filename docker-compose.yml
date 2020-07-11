@@ -1,0 +1,51 @@
+version: '2.1'
+
+networks:
+  netcorekafka:
+
+services:
+  netcorekafkaproducer:
+    image: netcorekafkaproducer
+    restart: always
+    ports:
+      - 8082:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8080
+    networks:
+      - netcorekafka
+
+  zoonetproducer:
+    image: zookeeper:3.4.9
+    hostname: zoonetproducer
+    ports:
+      - "2181:2181"
+    environment:
+        ZOO_MY_ID: 1
+        ZOO_PORT: 2181
+        ZOO_SERVERS: server.1=zoonetproducer:2888:3888
+    volumes:
+      - ./kafka-netproducer/zoonetproducer/data:/data
+      - ./kafka-netproducer/zoonetproducer/datalog:/datalog
+    networks:
+      - netcorekafka
+
+  kafkanetproducer:
+    image: confluentinc/cp-kafka:5.4.0
+    hostname: kafkanetproducer
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafkanetproducer:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoonetproducer:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./kafka-netproducer/kafkanetproducer/data:/var/lib/kafka/data
+    depends_on:
+      - zoonetproducer
+    networks:
+      - netcorekafka
