@@ -1,5 +1,7 @@
 # An Example of Confluence Kafka Producer using .NET Core
 
+### Wanna build a .NET Core Kafka Consumer example? See my repo at https://github.com/jcorreaviana/kafka-consumer-example
+
 ## Stack of sample
 
 | Option | Description | Default Port in docker-file
@@ -45,6 +47,8 @@ To do this, run in your terminal (in this case, running in Ubuntu 20.04)
 kafka-topics.sh --bootstrap-server localhost:9092 --list       
 ```
 
+![Result 1](https://github.com/jcorreaviana/kakfa-producer-example/blob/master/images/topics-host-list-example.jpeg?raw=true)
+
 ### 5. Prepare one console consumer
 
 To do this, run in your terminal (in this case, running in Ubuntu 20.04)
@@ -74,5 +78,16 @@ Example: <i>key_value</i><strong> : </strong><i>message_value</i>
 ```
 
 And others... :)
+
+This result is like this.
+
+![Result 2](https://github.com/jcorreaviana/kakfa-producer-example/blob/master/images/response-example.jpeg?raw=true)
+
+
+### 7. See the messages in your consumer
+
+![Result 3](https://github.com/jcorreaviana/kakfa-producer-example/blob/master/images/consumer-example.jpeg?raw=true)
+
+### Wanna build a .NET Core Kafka Consumer example? See my repo at https://github.com/jcorreaviana/kafka-consumer-example
 
 #iswe
